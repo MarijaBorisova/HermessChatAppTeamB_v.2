@@ -24,27 +24,22 @@ namespace HermessChatAppTeamB_v._2
         {
             services.AddTransient<IUserValidator<User>, CustomUserValidator>();
 
-            services.AddDbContext<ApplicationContext>(options =>
+             services.AddDbContext<ApplicationContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));//to add services for EntityFrameworkCore
+             
+             services.AddIdentity<User, IdentityRole>(opts => {
+                 opts.User.RequireUniqueEmail = true;    // unique email
+                 opts.User.AllowedUserNameCharacters = ".@abcdefghijklmnopqrstuvwxyz"; // appropriate symbols
+             })
+                   .AddEntityFrameworkStores<ApplicationContext>()
+                   .AddDefaultTokenProviders() ;//to add services of Identity and the storage of saving Identity data
+            
+             services.AddRazorPages();
 
-            services.AddIdentity<User, IdentityRole>(opts => {
-                opts.User.RequireUniqueEmail = true;    // unique email
-                opts.User.AllowedUserNameCharacters = ".@abcdefghijklmnopqrstuvwxyz"; // appropriate symbols
-            })
-                  .AddEntityFrameworkStores<ApplicationContext>();//to add services of Identity and the storage of saving Identity data
+             services.AddControllersWithViews();
+            /*string conStr = "Server=(localdb)\\mssqllocaldb;Database=usersdb46;Trusted_Connection=True;MultipleActiveResultSets=true";
+            services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(conStr));*/
           
-            /*services.AddIdentity<User, IdentityRole>(opts => {
-                opts.Password.RequiredLength = 5;   // minimum length
-                opts.Password.RequireNonAlphanumeric = false;   // no alphabetical and numerical symbols
-                opts.Password.RequireLowercase = false; 
-                opts.Password.RequireUppercase = false; 
-                opts.Password.RequireDigit = false; 
-            })
-                    .AddEntityFrameworkStores<ApplicationContext>();*/
-            services.AddRazorPages();
-
-           
-            services.AddControllersWithViews();
         }
 
         public void Configure(IApplicationBuilder app)

@@ -17,5 +17,6 @@ namespace HermessChatAppTeamB_v._2.ViewModels
         public bool RememberMe { get; set; }
 
         public string ReturnUrl { get; set; }
+
     }
 }
